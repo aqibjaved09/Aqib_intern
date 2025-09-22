@@ -32,3 +32,15 @@ def parse_time(time_str):
 def is_time_between(check_time, start_time, end_time):
     #Adding Check if a time is between two other times.
     return start_time <= check_time <= end_time
+
+
+# 5th Commit Create Main Function
+def _simulation():
+    """The main function to run the simulation logic."""
+    # We need to keep a history of granted access to check cooldowns.
+    # Format: (employee_id, room_name, access_time)
+    access_ = []
+    results = []
+
+    # Sort requests by time to handle cooldown checks chronologically
+    employee_data_sorted = sorted(employee_data, key=lambda x: x['request_time'])
