@@ -1,4 +1,13 @@
 
+from datetime import datetime, timedelta
+import json
+
+# Define room rules as a dictionary
+ROOM_RULES = {
+    "ServerRoom": {"min_access_level": 2, "open_time": "09:00", "close_time": "11:00", "cooldown": 15},
+    "Vault": {"min_access_level": 3, "open_time": "09:00", "close_time": "10:00", "cooldown": 30},
+    "R&D Lab": {"min_access_level": 1, "open_time": "08:00", "close_time": "12:00", "cooldown": 10}
+
 
 
 
