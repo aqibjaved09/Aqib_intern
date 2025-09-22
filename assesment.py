@@ -114,6 +114,21 @@ def run_simulation():
             "status": "Granted",
             "reason": f"Access granted to {room_name}"
         })
-        
+        # Record this successful access in history for future cooldown checks
+        access_history.append((emp_id, room_name, emp_request_datetime))
+
     return results
+
+# Run the simulation and print results
+print("Running Employee Access Simulation\n")
+
+simulation_results = run_simulation()
+
+# Print the results in a readable format
+print(f"{'ID':<8} | {'Status':<8} | Reason")
+print("-" * 60)
+for result in simulation_results:
+    print("{result['id']:<8} | {result['status']:<8} | {result['reason']}")
+
+print("\n Simulation complete.")
 
