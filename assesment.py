@@ -84,6 +84,36 @@ def run_simulation():
             })
             continue
 
-        
 
+        # Commit 8th we add Check 3: Cooldown Period
+        # Convert request time to a full datetime for cooldown calculation (we use an arbitrary date, only time matters for difference)
+        arbitrary_date = datetime(2024, 1, 1)  # Use any date
+        emp_request_datetime = datetime.combine(arbitrary_date, emp_request_time)
+        cooldown_period = timedelta(minutes=room_rules['cooldown'])
+
+        # Check if this employee accessed this room within the cooldown period
+        grant_access = True
+        reason = ""
+        for history in access_history:
+            hist_emp_id, hist_room, hist_access_datetime = history
+            if hist_emp_id == emp_id and hist_room == room_name:
+                time_difference = emp_request_datetime - hist_access_datetime
+                if time_difference < cooldown_period:
+                    grant_access = False
+                    cooldown_end_time = (hist_access_datetime + cooldown_period).time().strftime('%H:%M')
+                    reason = f"Access denied. Cooldown active until {cooldown_end_time}. Last access at {hist_access_datetime.time().strftime('%H:%M')}"
+                    break
+
+        if not grant_access:
+            results.append({"id": emp_id, "status": "Denied", "reason": reason})
+            continue
+
+        # If all checks passed, grant access
+        results.append({
+            "id": emp_id,
+            "status": "Granted",
+            "reason": f"Access granted to {room_name}"
+        })
+        
+    return results
 
