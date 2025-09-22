@@ -64,7 +64,7 @@ def run_simulation():
             })
             continue
 
-        # Check 1: Access Level
+        # Commit 6th Check 1 Access Level
         if emp_access_level < room_rules['min_access_level']:
             results.append({
                 "id": emp_id,
@@ -72,3 +72,18 @@ def run_simulation():
                 "reason": f"Access level too low. Required: {room_rules['min_access_level']}, Had: {emp_access_level}"
             })
             continue
+
+                # Commit 7th Check 2 Time Window
+        room_open_time = parse_time(room_rules['open_time'])
+        room_close_time = parse_time(room_rules['close_time'])
+        if not is_time_between(emp_request_time, room_open_time, room_close_time):
+            results.append({
+                "id": emp_id,
+                "status": "Denied",
+                "reason": f"Room is closed. Open hours: {room_rules['open_time']} to {room_rules['close_time']}"
+            })
+            continue
+
+        
+
+
