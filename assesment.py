@@ -35,12 +35,40 @@ def is_time_between(check_time, start_time, end_time):
 
 
 # 5th Commit Create Main Function
-def _simulation():
+def run_simulation():
     """The main function to run the simulation logic."""
     # We need to keep a history of granted access to check cooldowns.
     # Format: (employee_id, room_name, access_time)
-    access_ = []
+    access_history = []
     results = []
 
     # Sort requests by time to handle cooldown checks chronologically
     employee_data_sorted = sorted(employee_data, key=lambda x: x['request_time'])
+
+    for employee in employee_data_sorted:
+        emp_id = employee['id']
+        emp_access_level = employee['access_level']
+        emp_request_time_str = employee['request_time']
+        room_name = employee['room']
+
+        # Convert string time to a time object for comparison
+        emp_request_time = parse_time(emp_request_time_str)
+
+        # Get the rules for the requested room
+        room_rules = ROOM_RULES.get(room_name)
+        if not room_rules:
+            results.append({
+                "id": emp_id,
+                "status": "Denied",
+                "reason": f"Room '{room_name}' does not exist."
+            })
+            continue
+
+        # Check 1: Access Level
+        if emp_access_level < room_rules['min_access_level']:
+            results.append({
+                "id": emp_id,
+                "status": "Denied",
+                "reason": f"Access level too low. Required: {room_rules['min_access_level']}, Had: {emp_access_level}"
+            })
+            continue
